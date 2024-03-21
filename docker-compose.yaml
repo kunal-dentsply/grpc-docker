@@ -1,0 +1,22 @@
+services:
+  server:
+    container_name: "my_server"
+    build: ./server
+    networks:
+      - my-network
+  client:
+    container_name: "my_client"
+    depends_on:
+      - server
+    build: ./client
+    ports:
+      - "5300:5300"
+    networks:
+      - my-network
+networks:
+  my-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "173.18.0.0/16"
