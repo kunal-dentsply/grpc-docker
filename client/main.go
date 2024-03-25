@@ -22,7 +22,7 @@ func printFeature(client pb.RouteGuideClient, point *pb.Point) {
 	if feature, err := client.GetFeature(ctx, point); err != nil {
 		logger.Errorf("GetFeature failed: %v", err)
 	} else {
-		logger.Infof("GetFeature success: %v", feature)
+		logger.Infof("GetFeature success! Name: %v, Location: %v", feature.GetName(), feature.GetLocation())
 	}
 }
 
