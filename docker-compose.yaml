@@ -11,8 +11,6 @@ services:
     depends_on:
       - server
     build: ./client
-    ports:
-      - "5300:5300"
     networks:
       - my-network
     env_file:
