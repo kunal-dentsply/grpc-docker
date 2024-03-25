@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"google.golang.org/grpc"
@@ -10,7 +11,6 @@ import (
 
 	logger "github.com/sirupsen/logrus"
 
-	"client/config"
 	pb "client/proto"
 )
 
@@ -29,7 +29,18 @@ func printFeature(client pb.RouteGuideClient, point *pb.Point) {
 func main() {
 	logger.SetLevel(logger.DebugLevel)
 
-	serverAddr := fmt.Sprintf("%v:%d", config.HostName, config.Port)
+	host := os.Getenv("HOST")
+	port := os.Getenv("PORT")
+
+	if host == "" {
+		logger.Fatalf("HOST is not set")
+	}
+
+	if port == "" {
+		logger.Fatalf("PORT is not set")
+	}
+
+	serverAddr := fmt.Sprintf("%s:%s", host, port)
 	conn, err := grpc.Dial(serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Fatalf("failed to dial: %v", err)

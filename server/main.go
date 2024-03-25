@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"os"
 
 	"google.golang.org/grpc"
 
 	logger "github.com/sirupsen/logrus"
 
-	"server/config"
 	pb "server/proto"
 )
 
@@ -24,7 +24,14 @@ func (s *routeGuideServer) GetFeature(ctx context.Context, point *pb.Point) (*pb
 
 func main() {
 	logger.SetLevel(logger.DebugLevel)
-	ipAddr := fmt.Sprintf("%v:%d", config.HostName, config.HostPort)
+	host := ""
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		logger.Fatalf("PORT is not set")
+	}
+
+	ipAddr := fmt.Sprintf("%s:%s", host, port)
 	logger.Debugf("Server listening on %v", ipAddr)
 	lis, err := net.Listen("tcp", ipAddr)
 	if err != nil {
